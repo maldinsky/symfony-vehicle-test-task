@@ -1,0 +1,66 @@
+version: "3"
+services:
+    symfony-vehicle-nginx:
+        build:
+            context: ./.docker
+            dockerfile: nginx.docker
+        container_name: symfony-vehicle-nginx
+        volumes:
+            - "$PWD/app/:/var/www"
+        environment:
+            PHP_IDE_CONFIG: "serverName=Docker"
+        depends_on:
+            - symfony-vehicle-php-fpm
+        ports:
+            - 8082:80
+        networks:
+            - symfony-vehicle-network
+
+    symfony-vehicle-php-fpm:
+        build:
+            context: ./.docker
+            dockerfile: php-fpm.docker
+        container_name: symfony-vehicle-php-fpm
+        volumes:
+            - "$PWD/app/:/var/www"
+        environment:
+            XDEBUG_CONFIG: "remote_host=192.168.221.1 remote_enable=1"
+            PHP_IDE_CONFIG: "serverName=Docker"
+        depends_on:
+            - symfony-vehicle-mysql
+        networks:
+            - symfony-vehicle-network
+
+    symfony-vehicle-php-cli:
+        build:
+            context: ./.docker
+            dockerfile: php-cli.docker
+        container_name: symfony-vehicle-php-cli
+        volumes:
+            - "$PWD/app/:/var/www"
+            - "$PWD/.data/composer:/root/.composer/cache"
+        environment:
+            XDEBUG_CONFIG: "remote_host=192.168.221.1 remote_enable=1"
+            PHP_IDE_CONFIG: "serverName=Docker"
+        depends_on:
+            - symfony-vehicle-mysql
+        extra_hosts:
+                - "host.docker.internal: 192.168.221.1"
+        networks:
+            - symfony-vehicle-network
+
+    symfony-vehicle-mysql:
+        image: mysql:8
+        container_name: symfony-vehicle-mysql
+        volumes:
+            - "$PWD/.data/db/mysql8:/var/lib/mysql"
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+        ports:
+            - 3310:3306
+        networks:
+            - symfony-vehicle-network
+
+networks:
+    symfony-vehicle-network:
+        external: true
