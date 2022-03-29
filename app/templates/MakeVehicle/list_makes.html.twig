@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Vehicle Makes ({{ vehicleType.getDescription }}){% endblock %}
+
+{% block body %}
+    <h1>{{ vehicleType.getDescription }}</h1>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Code</th>
+                <th scope="col">Description</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if vehicleMakes is not empty %}
+                {% for vehicleMake in vehicleMakes %}
+                    <tr>
+                        <th>
+                            {{ vehicleMake.getCode }}
+                        </th>
+                        <td>{{ vehicleMake.getDescription }}</td>
+                        <td>
+                            <button
+                                    class="btn btn-primary js-get-vehicle-model"
+                                    data-toggle=".js-response-vehicle-model{{ loop.index }}"
+                                    data-vehicle-type="{{ vehicleType.getCode }}"
+                                    data-vehicle-make="{{ vehicleMake.getCode }}"
+                            >
+                                <i class="fa fa-arrow-down"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr class="d-none js-response-vehicle-model{{ loop.index }}">
+                        <td colspan="3" class="js-response-list-vehicle-model"></td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td class="text-center" colspan="2">Not found</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+{% endblock %}

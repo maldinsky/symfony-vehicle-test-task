@@ -55,8 +55,10 @@ Encore
         config.corejs = 3;
     })
 
+    .addStyleEntry('main', './assets/styles/main.scss')
+
     // enables Sass/SCSS support
-    //.enableSassLoader()
+    .enableSassLoader()
 
     // uncomment if you use TypeScript
     //.enableTypeScriptLoader()

@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Code</th>
+                <th scope="col">Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if vehicleTypes is not empty %}
+                {% for vehicleType in vehicleTypes %}
+                    <tr>
+                        <th>
+                            <a href="{{ path('vehicle_make_list', {code: vehicleType.getCode}) }}">
+                                {{ vehicleType.getCode }}
+                            </a>
+                        </th>
+                        <td>{{ vehicleType.getDescription }}</td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td class="text-center" colspan="2">Not found</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+{% endblock %}

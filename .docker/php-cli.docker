@@ -7,7 +7,10 @@ RUN rm /etc/apt/preferences.d/no-debian-php \
         wget \
         git \
         unzip \
+        nodejs \
+        npm \
     && docker-php-ext-install \
+        pdo_mysql \
         zip
 
 RUN wget https://raw.githubusercontent.com/mlocati/docker-php-extension-installer/master/install-php-extensions \

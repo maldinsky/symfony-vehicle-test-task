@@ -1,12 +1,40 @@
-/*
- * Welcome to your app's main JavaScript file!
- *
- * We recommend including the built version of this JavaScript file
- * (and its CSS file) in your base layout (base.html.twig).
- */
+const $ = require('jquery');
+// this "modifies" the jquery module: adding behavior to it
+// the bootstrap module doesn't export/return anything
+require('bootstrap');
 
-// any CSS you import will output into a single css file (app.css in this case)
-import './styles/app.css';
+$(document).ready(function() {
+    $('.js-get-vehicle-model').on('click', function (){
+        var jsGetVehicleModel = $(this),
+            blockToggle = $(jsGetVehicleModel.data('toggle')),
+            vehicleType = jsGetVehicleModel.data('vehicle-type'),
+            vehicleMake = jsGetVehicleModel.data('vehicle-make');
+        $.ajax({
+            url: '/makes/' + vehicleType + '/' + vehicleMake,
+            dataType: 'json',
+        })
+        .done(function(response) {
+            let result = '';
 
-// start the Stimulus application
-import './bootstrap';
+            for (let vehicleModelKey in response) {
+                if (response.hasOwnProperty(vehicleModelKey)) {
+                    const vehicleModel = response[vehicleModelKey];
+
+                    result += '<li>' + vehicleModel.code + ' - ' + vehicleModel.description + '</li>';
+                }
+            }
+
+            if(result) {
+                blockToggle.find('.js-response-list-vehicle-model').html('<ul>' + result + '</ul>');
+            } else {
+                blockToggle.find('.js-response-list-vehicle-model').html('<p class="text-center">Not found</p>');
+            }
+        })
+        .fail(function() {
+            blockToggle.find('.js-response-list-vehicle-model').html('<p class="text-center">Error, please try again later</p>');
+        })
+        .always(function (){
+            blockToggle.removeClass('d-none');
+        });
+    });
+});
