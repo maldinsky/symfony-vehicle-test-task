@@ -48,7 +48,7 @@ You should log all requests for models route to the database (SearchLog entity)
 
 Клонирование проекта:
 ```
-git clone git@gitlab.com:maldinsky/symfony-vehicle-test-task.git
+git clone git@github.com:maldinsky/symfony-vehicle-test-task.git
 ```
 
 Перейти в папку с проектом и запустить:
